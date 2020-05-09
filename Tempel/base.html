@@ -1,10 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="en">
-    <header></header>
+    <header>
+        <title>{%block head_title%}Consumer{%endblock%}</title>
+        {% include 'snippets/css.html' %}
+        <center>
+            <h1>HGH Corporation</h1>
+        </center>
+        
+    </header>
     <body>
-        <h1>Salam bar donya</h1>
-        <p>This is my first html code (Hello from html file) i am ... {{VARIABLE_A}} </p>
-        <p> use case of contex variable </p>
-        <p>the random number is {{NUM}}</p>
+        {% include 'snippets/nav.html' %}
+        <div class='container'>
+            {% block content %}
+                {% comment 'internal of block' %}
+                you can define somthing in block and use it in chiled by {block.super} command
+                {% endcomment %}
+            {% endblock content %}
+        </div>
+        {% include 'snippets/js.html' %}
     </body>
 </html>
