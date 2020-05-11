@@ -16,12 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from monitoring.views import oldhome, home ,about ,contact
-
+from monitoring.views import oldhome, home ,about ,contact,HomeView,AboutView,ContactView
+from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('old_home/',oldhome),
-    path('', home),
-    path('about/', about),
-    path('contact/', contact),
+    path('F', home),
+    path('Fabout/', about),
+    path('Fcontact/', contact),
+    path('', HomeView.as_view()),
+    path('about/', AboutView.as_view()),
+    path('contact/', ContactView.as_view()),
+    path('static-web/',TemplateView.as_view(template_name="Static.html") )
+
 ]
