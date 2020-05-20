@@ -25,7 +25,9 @@ from monitoring.views import (
     AboutView,
     ContactView,
     ConsumerView,
-    ConsumerDetailView)
+    ConsumerDetailView,
+    ConsumerCreateView
+    )
 from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,5 +41,8 @@ urlpatterns = [
     path('static-web/',TemplateView.as_view(template_name="Static.html")),
     path('consumer/', ConsumerView.as_view()),
     path('consumer/<slug:slug>/', ConsumerDetailView.as_view()),
+    path('consumer/add-new', ConsumerCreateView.as_view())
+    
+    
     
 ]

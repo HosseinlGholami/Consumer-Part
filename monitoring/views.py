@@ -1,9 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import TemplateView,DetailView
+from django.views.generic import TemplateView , DetailView
+from django.views.generic.edit import FormView ,CreateView ,DeleteView
 import random
 from .models import Consumer
+from .form   import ConsumerCreatFormClassic ,ConsumerCreatForm
+
 # Create your views here.
+
+class ConsumerCreateView (CreateView):
+    template_name="form.html"
+    form_class=ConsumerCreatForm
+    success_url="/consumer"
 
 class ConsumerDetailView(DetailView):
     template_name = "consumerDetail.html"
