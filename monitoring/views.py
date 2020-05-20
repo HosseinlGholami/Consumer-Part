@@ -1,8 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,DetailView
 import random
+from .models import Consumer
 # Create your views here.
+
+class ConsumerDetailView(DetailView):
+    template_name = "consumerDetail.html"
+    queryset = Consumer.objects.all()
+
+
+class ConsumerView(TemplateView):
+    template_name = "consumer.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = Consumer.objects.all()
+        context={
+            "Page_name":"consumer Page",
+            "object_list":queryset
+        }
+        return context
+
 class HomeView(TemplateView):
     template_name = "home.html"
     def get_context_data(self, **kwargs):

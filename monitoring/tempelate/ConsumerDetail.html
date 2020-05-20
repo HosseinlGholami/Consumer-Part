@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block head_title %} {{object.name}} || {{block.super}} {%endblock head_title%}
+{% block content %}
+<h1>Name : {{object.name}} <small> {{object.Queue_Name}} </small></h1>
+<ul>
+    
+    <p>Username :{{object.username}}</p>
+    <p>Password :{{object.password}}</p>
+    <p>Password :{{object.Broker_ip}}</p>
+    <p>Password :{{object.port}}</p>
+    <p>Password :{{object.packet_to_consume}}</p>
+    
+</ul>
+
+<p>time of Creating:{{object.timestamp}}</p>
+<p>Updated {{object.timestamp|timesince}} ago </p>
+<p></p>
+{% endblock content %}
