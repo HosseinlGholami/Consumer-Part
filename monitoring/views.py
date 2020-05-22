@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView , DetailView
 from django.views.generic.edit import FormView ,CreateView ,DeleteView
 import random
@@ -7,6 +7,17 @@ from .models import Consumer
 from .form   import ConsumerCreatFormClassic ,ConsumerCreatForm
 
 # Create your views here.
+
+
+def Consumingstart(request,*args, **kwargs):
+    print(kwargs)
+    return HttpResponseRedirect("/consumer")
+
+
+def Consumingstop(request,*args, **kwargs):
+    print(args)
+    return HttpResponseRedirect("/consumer")
+
 
 class ConsumerCreateView (CreateView):
     template_name="form.html"

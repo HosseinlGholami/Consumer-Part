@@ -10,6 +10,12 @@
             <ul>
                 Queue_Name: {{obj.Queue_Name}} 
                 last_update:{{obj.last_update}}
+                <form method="GET" action="/consumer/{{obj.slug}}/start">
+                    <button type="submit">Start</button>
+                </form>
+                <form method="GET" action="/consumer/{{obj.slug}}/stop">
+                    <button type="submit">Stop</button>
+                </form>
             </ul>
             
         </li>
