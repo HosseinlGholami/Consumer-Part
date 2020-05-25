@@ -19,6 +19,7 @@ class Consumer (models.Model):
     def __str__(self):
         return self.name
     
+        
 def save_slug(sender , instance , *args, **kwargs):
     if not instance.slug:
         instance.slug=unique_slug_generator(instance)

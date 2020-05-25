@@ -13,6 +13,7 @@ gunicorn = "*"
 dj-database-url = "*"
 django-crispy-forms = "*"
 pillow = "*"
+pika = "*"
 
 [requires]
 python_version = "3.8"

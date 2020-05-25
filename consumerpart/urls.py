@@ -45,7 +45,7 @@ urlpatterns = [
     path('consumer/<slug:slug>/', ConsumerDetailView.as_view()),
     path('consumer/add-new', ConsumerCreateView.as_view()),
     path('consumer/<slug:slug>/start', Consumingstart),
-    path('consumer/<slug:slug>/stop', Consumingstart),
+    path('consumer/<slug:slug>/stop', Consumingstop),
     
     
 ]
