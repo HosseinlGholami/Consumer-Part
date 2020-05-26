@@ -1,20 +1,50 @@
 from django import forms
 
-from .models import Consumer
+from .models import CreateQueue,CreateConsumer
+
+
+class QueueCreatForm (forms.ModelForm):
+    class Meta:
+        model  = CreateQueue
+        fields = [    
+            "name",
+            "Durable",
+            "exchange",
+            "Routing_Key",
+        ]
 
 
 class ConsumerCreatForm (forms.ModelForm):
     class Meta:
-        model  = Consumer
+        model  = CreateConsumer
         fields = [
-            "name",
-            "Broker_ip",
-            "port",
-            "username",
-            "password",
-            "Queue_Name",
-            "packet_to_consume"
+                "name",
+                "Queue_Name",
+                "Pre_fetch",
+                "Time_to_Consume",
         ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class ConsumerCreatFormClassic(forms.Form):

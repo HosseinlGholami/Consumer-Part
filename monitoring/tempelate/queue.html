@@ -8,20 +8,14 @@
         <li> 
             <a href="{{obj.slug}}"> {{obj}} </a> <br/>
             <ul>
-                Queue_Name: {{obj.Queue_Name}} <br>
+                Queue_Name: {{obj.slug}} 
                 last_update:{{obj.last_update}}
-                <form method="GET" action="/consumer/{{obj.slug}}/start">
-                    <button type="submit">Start</button>
-                </form>
-                <form method="GET" action="/consumer/{{obj.slug}}/stop">
-                    <button type="submit">Stop</button>
-                </form>
+                
             </ul>
-            
         </li>
     {% endfor %}
 
-    <form method="GET" action="/consumer/add-new">
+    <form method="GET" action="/queue/add-new">
         <button type="submit">Creat new one</button>
     </form>
 </ul>

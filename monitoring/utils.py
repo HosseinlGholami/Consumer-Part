@@ -14,7 +14,7 @@ def unique_slug_generator(instance, new_slug=None):
     else:
         slug = slugify(instance.name)
         if slug in DONT_USE:
-            slug +'_BiaBookhoor'
+            slug +'_BugNadeBaradar'
 
 
     Klass = instance.__class__

@@ -29,6 +29,11 @@ from monitoring.views import (
     ConsumerCreateView,
     Consumingstart,
     Consumingstop,
+    QueueView,
+    QueueCreateView,
+    QueueDetailView,
+    QueuDelete,
+    ConsumerDelete,
     )
 from django.views.generic import TemplateView
 urlpatterns = [
@@ -46,6 +51,11 @@ urlpatterns = [
     path('consumer/add-new', ConsumerCreateView.as_view()),
     path('consumer/<slug:slug>/start', Consumingstart),
     path('consumer/<slug:slug>/stop', Consumingstop),
+    path('queue/', QueueView.as_view()),
+    path('queue/add-new', QueueCreateView.as_view()),
+    path('queue/<slug:slug>/', QueueDetailView.as_view()),
+    path('queue/<slug:slug>/delete', QueuDelete),
+    path('consumer/<slug:slug>/delete', ConsumerDelete),
     
     
 ]

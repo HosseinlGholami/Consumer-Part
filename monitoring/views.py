@@ -3,13 +3,49 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView , DetailView
 from django.views.generic.edit import FormView ,CreateView ,DeleteView
 import random
-from .models import Consumer
-from .form   import ConsumerCreatFormClassic ,ConsumerCreatForm
+from .models import CreateConsumer, CreateQueue
+from .form   import ConsumerCreatFormClassic ,ConsumerCreatForm,QueueCreatForm
 
 from .rabbitmq import rbmq
 import time ,pika
 thread_handeller=dict()
+
+def ConsumerDelete(request,*args, **kwargs):
+    print('Delete Queue  : '+ kwargs.get('slug') )
+    obj=CreateConsumer.objects.get( slug = kwargs.get('slug') )
+    obj.delete()
+
+    return HttpResponseRedirect("/consumer")
+
+
+def QueuDelete(request,*args, **kwargs):
+    print('Delete Queue  : '+ kwargs.get('slug') )
+    obj=CreateQueue.objects.get( slug = kwargs.get('slug') )
+    obj.delete()
+    return HttpResponseRedirect("/queue")
+
+
 # Create your views here.
+class QueueDetailView(DetailView):
+    template_name = "QueueDetail.html"
+    queryset = CreateQueue.objects.all()
+    
+class QueueCreateView (CreateView):
+    template_name="form.html"
+    form_class=QueueCreatForm
+    success_url="/queue"
+
+class QueueView(TemplateView):
+    template_name = "queue.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = CreateQueue.objects.all()
+        context={
+            "Page_name":"Queue Page",
+            "object_list":queryset
+        }
+        return context
+
 def Packet_Handeler_callback(ch, method, properties, body):
      print("Received"+body.decode("utf-8") +" from :" +method.consumer_tag)
      time.sleep(1)
@@ -17,16 +53,21 @@ def Packet_Handeler_callback(ch, method, properties, body):
 
 def Consumingstart(request,*args, **kwargs):
     print('start consuming : ' +kwargs.get('slug') )
-    credentials = pika.PlainCredentials('hgh', 'guest')
-    parameters = pika.ConnectionParameters('localhost',5672,'/',credentials)
-    connection = rbmq(Slug=kwargs.get('slug'),Parameter=parameters,
-              prefetch_count=2,
-              QueueName='classic_queue_2',
-              CalbackFunc=Packet_Handeler_callback
-              )
-    thread_handeller.update({kwargs.get('slug'):connection})
-    print(thread_handeller)
-    connection.start()
+    obj=CreateConsumer.objects.get(slug=kwargs.get('slug') )
+    
+    if CreateQueue.objects.get(slug=obj.Queue_Name):
+        credentials = pika.PlainCredentials('hgh', 'guest')
+        parameters = pika.ConnectionParameters('localhost',5672,'/',credentials)
+        connection = rbmq(Slug=kwargs.get('slug'),Parameter=parameters,
+                prefetch_count=obj.Pre_fetch,
+                QueueName=obj.Queue_Name,
+                CalbackFunc=Packet_Handeler_callback
+                )
+        thread_handeller.update({kwargs.get('slug'):connection})
+        print(thread_handeller)
+        connection.start()
+    else:
+        print("queue does not exist !")
     return HttpResponseRedirect("/consumer") 
 
 
@@ -48,14 +89,14 @@ class ConsumerCreateView (CreateView):
 
 class ConsumerDetailView(DetailView):
     template_name = "consumerDetail.html"
-    queryset = Consumer.objects.all()
+    queryset = CreateConsumer.objects.all()
 
 
 class ConsumerView(TemplateView):
     template_name = "consumer.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Consumer.objects.all()
+        queryset = CreateConsumer.objects.all()
         context={
             "Page_name":"consumer Page",
             "object_list":queryset

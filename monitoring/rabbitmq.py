@@ -28,13 +28,13 @@ class rbmq(threading.Thread):
             channel.basic_consume(queue=self.queuename,
                           on_message_callback=self.callbackfunc,
                           consumer_tag=self.slug)
-            print( self.slug ,' [*] Waiting for messages.')
+            print( self.slug ,' [*] Waiting for messages on :',self.queuename )
             channel.start_consuming()
         finally: 
-            # channel.stop_consuming()
-            # channel.close()
-            # connection.close()
-            print('ended') 
+            channel.stop_consuming()
+            channel.close()
+            connection.close()
+            print(self.slug ,'  Stoped from ',self.queuename )
            
     def get_id(self): 
         # returns id of the respective thread 
