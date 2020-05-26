@@ -8,6 +8,7 @@ from .form   import ConsumerCreatFormClassic ,ConsumerCreatForm
 
 from .rabbitmq import rbmq
 import time ,pika
+thread_handeller=dict()
 # Create your views here.
 def Packet_Handeler_callback(ch, method, properties, body):
      print("Received"+body.decode("utf-8") +" from :" +method.consumer_tag)
@@ -23,25 +24,20 @@ def Consumingstart(request,*args, **kwargs):
               QueueName='classic_queue_2',
               CalbackFunc=Packet_Handeler_callback
               )
-    obj=Consumer.objects.get(slug=kwargs.get('slug'))
-    obj.connection=connection
-    obj.save()
-    print(connection)
+    thread_handeller.update({kwargs.get('slug'):connection})
+    print(thread_handeller)
     connection.start()
     return HttpResponseRedirect("/consumer") 
 
 
 def Consumingstop(request,*args, **kwargs):
     print('stop consuming : '+ kwargs.get('slug') )
-    parameters = pika.ConnectionParameters('localhost',5672,'/',credentials)
-    connection = rbmq(Slug=kwargs.get('slug'),Parameter=parameters,
-              prefetch_count=2,
-              QueueName='classic_queue_2',
-              CalbackFunc=Packet_Handeler_callback
-              )
-    obj=Consumer.objects.get(slug=kwargs.get('slug'))
-    print(connection == obj.connection)
-
+    connction=thread_handeller.get(kwargs.get('slug'))
+    if (connction!=None):
+        connction.stop()
+        thread_handeller.pop(kwargs.get('slug'))
+    else:
+        print("first you should to start it ")
     return HttpResponseRedirect("/consumer")
 
 
