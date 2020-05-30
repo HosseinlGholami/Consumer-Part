@@ -10,12 +10,25 @@ from .rabbitmq import rbmq
 import time ,pika
 thread_handeller=dict()
 
-def ConsumerDelete(request,*args, **kwargs):
-    print('Delete Queue  : '+ kwargs.get('slug') )
-    obj=CreateConsumer.objects.get( slug = kwargs.get('slug') )
-    obj.delete()
+import requests
 
-    return HttpResponseRedirect("/consumer")
+class monitoringView(TemplateView):
+    template_name = "monitoring.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        Queue_objs=CreateQueue.objects.all()
+        auth=requests.auth.HTTPBasicAuth('hgh', 'guest')
+        qs=list()
+        for obj in  Queue_objs:
+            url='http://127.0.0.1:15672/api/queues/%2F/'+obj.slug+'/'
+            data=requests.get(url=url,auth=auth).json()
+            qs.append(data)
+        context={
+            "Page_name":"monitoring Queue Page",
+            "Queue_Detail_json":qs
+        }
+        return context
 
 
 def QueuDelete(request,*args, **kwargs):
@@ -23,6 +36,12 @@ def QueuDelete(request,*args, **kwargs):
     obj=CreateQueue.objects.get( slug = kwargs.get('slug') )
     obj.delete()
     return HttpResponseRedirect("/queue")
+
+def ConsumerDelete(request,*args, **kwargs):
+    print('Delete Consumer  : '+ kwargs.get('slug') )
+    obj=CreateConsumer.objects.get( slug = kwargs.get('slug') )
+    obj.delete()
+    return HttpResponseRedirect("/consumer")
 
 
 # Create your views here.
@@ -47,7 +66,7 @@ class QueueView(TemplateView):
         return context
 
 def Packet_Handeler_callback(ch, method, properties, body):
-     print("Received"+body.decode("utf-8") +" from :" +method.consumer_tag)
+     print("Received   "+body.decode("utf-8") +" from :" +method.consumer_tag)
      time.sleep(1)
      ch.basic_ack(delivery_tag = method.delivery_tag)
 
@@ -55,7 +74,7 @@ def Consumingstart(request,*args, **kwargs):
     print('start consuming : ' +kwargs.get('slug') )
     obj=CreateConsumer.objects.get(slug=kwargs.get('slug') )
     
-    if CreateQueue.objects.get(slug=obj.Queue_Name):
+    if  CreateQueue.objects.filter(slug=obj.Queue_Name) :
         credentials = pika.PlainCredentials('hgh', 'guest')
         parameters = pika.ConnectionParameters('localhost',5672,'/',credentials)
         connection = rbmq(Slug=kwargs.get('slug'),Parameter=parameters,
