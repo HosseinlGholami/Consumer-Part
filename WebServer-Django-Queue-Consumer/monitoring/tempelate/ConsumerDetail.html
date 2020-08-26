@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block head_title %} {{object.name}} || {{block.super}} {%endblock head_title%}
+{% block content %}
+<h1>Name : {{object.name}} <small> {{object.Queue_Name}} </small></h1>
+<ul>
+    <p>Consumer Tag :  {{object.slug}}</p>
+    <p>Pre-fetch Number :  {{object.Pre_fetch}}</p>
+    <small><p>its number of packet which assign to Consumer</p></small>
+    <p>Time to Consume :  {{object.Time_to_Consume}}</p>
+    <small><p>the time that packet has Stay in Consumer</p></small>
+</ul>
+
+<p>time of Creating:{{object.timestamp}}</p>
+<p>Updated {{object.timestamp|timesince}} ago </p>
+<p></p>
+
+<form method="GET" action="/consumer/{{object.slug}}/delete">
+    <button type="submit">Delete</button>
+</form>
+
+{% endblock content %}

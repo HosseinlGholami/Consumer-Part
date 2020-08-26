@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block head_title %} {{Page_name}} || {{block.super}} {%endblock head_title%}
+
+{% block content %}
+<h2>{{Page_name}}</h2>
+<h3> this is my first web applicaton im {{NAME}}, its totally a demo  </h3>
+<h1>please check the <a href="/consumer"><b>consumer</b></a>  page</h1>
+<p>lets create some random number ! </p>
+<p> the random number is {{NUM}}</p>
+<p>this is a {{ODD_OR_EVEN}}</p>
+<p> you are so :
+    {% if SHOW_LUCKY %}
+        lucky</p>
+    {% else %}
+        poor </p>
+    {% endif %}
+{% endblock content %}

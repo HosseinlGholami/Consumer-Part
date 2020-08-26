@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block head_title %} {{object.name}} || {{block.super}} {%endblock head_title%}
+{% block content %}
+<h1>Name : {{object.name}}</h1>
+<ul>
+    <h1><small>Queue Name : {{object.slug}}</small></h1>
+    <p>this is name which you should insert to your consumer </p>
+    <p>Durable :{{object.Durable}}</p>
+    <small><p>the parameter for activating acknowledgement</small>
+    <p>exchange :{{object.exchange}}</p>
+    <small><p>the Buffer where Recive message and should Bind to Queue</p></small>
+    <p>Routing_Key :{{object.Routing_Key}}</p>
+    <small><p>the parameter for sends message to queues</p></small>
+    
+</ul>
+
+<p>time of Creating:{{object.timestamp}}</p>
+<p>Updated {{object.timestamp|timesince}} ago </p>
+<p></p>
+
+<form method="GET" action="/queue/{{object.slug}}/delete">
+    <button type="submit">Delete</button>
+</form>
+
+{% endblock content %}
