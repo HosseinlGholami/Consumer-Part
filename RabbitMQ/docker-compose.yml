@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+    
+services:
+  queue:
+    build: rbmq/.
+    container_name: rabbitmq
+    ports:
+      - 5672:5672 
+      - 15672:15672 
+      - 1884:1884 
+    volumes:
+      - "./rbmq/Conf/:/etc/rabbitmq/"
+    networks:
+      - app-tier
